@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Good Deeds</title>
+</head>
+<link href="https://fonts.googleapis.com/css?family=Neucha" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Cinzel+Decorative" rel="stylesheet">
+<style type="text/css">
+	body {
+		position: absolute;
+		top:50%;
+		width: 100%;
+		margin-top: -160px;
+		overflow-x: hidden;
+	}
+	.logo {
+		text-align: center;
+	}
+	.logo img {
+		display: inline-block;
+		max-width: 100%;
+	}
+	.slogan {
+		text-align: center;
+	}
+	.slogan h2 {
+		display: inline-block;
+		font-family: 'Cinzel Decorative', cursive;
+		color: #295261;
+	}
+	footer {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 50px;
+		background: #aaa;
+	}
+	a {
+		text-decoration: none; 
+		color: #295261;
+	}
+	nav#main {
+		position: relative;
+		width: 100%;
+	}
+	nav#main ul {
+		position: absolute;
+		margin-top: 0;
+		top:0;
+		left: 50%;
+		margin-left: -170px;
+
+	}
+	nav#main ul li {
+		font-family: 'Cinzel Decorative', cursive;
+		font-size: 18px;
+		display: inline-block;
+		float: left;
+		list-style: none;
+		padding: 15px;
+		color: #295261;
+		cursor: pointer;
+	}
+	nav#main ul li:hover {
+		background: #fff;
+	}
+	.dimmer {
+		position: fixed;
+		height: 100%;
+		width: 100%;
+		top: 0;
+		left: 0;
+		background: rgba(0,0,0,0.7);
+		text-align: center;
+	}
+	.alllist {
+		position: fixed;
+		height: 100%;
+		width: 100%;
+		top: 0;
+		left: 0;
+		background: #fff;
+		text-align: center;
+	}
+	.addform {
+		padding-top: 20px;
+		width: 500px;
+		max-width: 100%;
+		display: inline-block;
+		height: 100%;
+		background: #fff;
+	}
+	.addform form {
+
+		width: 80%;
+		margin-left: 10%;
+	}
+	button {
+		background: #65B365;
+		border: none;
+		padding: 7px;
+		color: #fff;
+		border-radius: 5px;
+		margin: 5px;
+		text-transform: uppercase;
+
+	}
+	form input, form textarea {
+		width: 99%;
+		margin-top: 10px;
+		color: #fff;
+		padding: 7px;
+		border: none;
+		border-radius: 5px;
+		background: #295261;
+	}
+	.alllist table {
+		width: 100%
+	}
+	tr.thead {
+		background: #333;
+		color: white;
+
+	}
+	th, th {
+		padding: 5px;
+	}
+	.cl-1 {
+		width: 100%;
+	}
+	</style>
+<body>
+<div class="logo"><img src="logo.SVG"></div>
+<div class="slogan"><h2>Today you help People <br> Tomorrow Peolple will come to help you</h2></div>
+<div class="alllist"  style="display: none"><button class="cl-1">Close</button><table></table></div>
+<div class="dimmer" style="display: none"><div class="addform" style="display: none">
+	<button class="cl-2">Close</button>
+	<form id="addtaskmain">
+		<input type="text" name="name" placeholder="Name">
+		<textarea name="description" placeholder="Description"></textarea>
+		<input name="photo" type="file" 
+   class="cloudinary-fileupload" data-cloudinary-field="image_id" 
+   data-form-data=" ... html-escaped JSON data ... " ></input>
+		<button type="submit">Create</button>	
+	</form>
+</div></div>
+</body>
+<footer><nav id="main"><ul class="tab"><li id="list-btn">List all task</li><li id="add-btn">Add new</li></ul></nav></footer>
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+  <script type="text/javascript">
+  	$('#list-btn').click(function(){
+  		$(".alllist").slideDown();
+  		$("table").html('<tr class="thead"><th>Имя</th><th>О деле</th><th>Создано</th><th>GPS</th><th>Фото</th></tr>');
+  		$.get('/deed', function(data) {
+  				$.each(data, function(index, value) {
+  					console.log(value.pos.lat, value.pos.lon)
+    $("table").append('<tr class="titem"><td>'+value.name+'</td><td>'+value.description+'</td><td class="moment-change">'+value.created_at+'</td><td></td><td></td></tr>');
+});  }
+  				
+  				
+  			
+  		)
+  	})
+  	$('.cl-2').click(function(){
+  		$(this).parent().parent().fadeOut()
+  	})
+  	  	$('.cl-1').click(function(){
+  		$(this).parent().fadeOut()
+  	})
+  	$('#add-btn').click(function() {
+  		$('.dimmer').fadeIn();
+  		$(".addform").slideDown();
+  	})
+  </script>
+<!-- <script src='jquery.ui.widget.js' type='text/javascript'></script>
+<script src='jquery.iframe-transport.js' type='text/javascript'></script>
+<script src='jquery.fileupload.js' type='text/javascript'></script>
+<script src='jquery.cloudinary.js' type='text/javascript'></script> -->
+<script type="text/javascript" src='moment.js'></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		moment.locale('ru');
+		$(".moment-change").each(function() {
+			var stamp = parseInt($(this).text())/1000;
+			$(this).text(moment.unix(stamp).format("MM/DD/YYYY"))
+		})
+	})
+</script>
+</html>
